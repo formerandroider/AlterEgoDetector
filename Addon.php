@@ -32,10 +32,7 @@ abstract class LiamW_AlterEgoDetector_Addon
 		$contentTypeFieldInstaller = LiamW_Shared_DatabaseSchema_Abstract2::create('LiamW_AlterEgoDetector_DatabaseSchema_ContentTypeField');
 		$contentTypeFieldInstaller->install($versionId);
 
-		// update cache
-		$contentTypes = XenForo_Application::get('contentTypes');
-		$contentTypes['alterego']['report_handler_class'] = 'LiamW_AlterEgoDetector_ReportHandler_AlterEgo';
-		XenForo_Application::set('contentTypes', $contentTypes);
+		XenForo_Model::create('XenForo_Model_ContentType')->rebuildContentTypeCache();
 	}
 
 	public static function uninstall()
@@ -46,9 +43,7 @@ abstract class LiamW_AlterEgoDetector_Addon
 		$contentTypeFieldInstaller->uninstall();
 
 		// update cache
-		$contentTypes = XenForo_Application::get('contentTypes');
-		unset($contentTypes['alterego']);
-		XenForo_Application::set('contentTypes', $contentTypes);
+		XenForo_Model::create('XenForo_Model_ContentType')->rebuildContentTypeCache();
 	}
 
 	public static function extendClass($class, array &$extend)
