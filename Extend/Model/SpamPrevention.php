@@ -1,5 +1,20 @@
 <?php
 
+/**
+ * Copyright 2014 Liam Williams
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 class LiamW_AlterEgoDetector_Extend_Model_SpamPrevention extends XFCP_LiamW_AlterEgoDetector_Extend_Model_SpamPrevention
 {
 	public function logScore($phrase, $score, $data = array())
@@ -43,8 +58,6 @@ class LiamW_AlterEgoDetector_Extend_Model_SpamPrevention extends XFCP_LiamW_Alte
 		{
 			$this->_debug('Cookie true');
 
-			// AE DETECTED
-			$alterEgoUser = $user;
 			$originalUserId = $cookie;
 			$originalUser = $userModel->getUserById($originalUserId, array(
 				'join' => XenForo_Model_User::FETCH_USER_PERMISSIONS
@@ -264,22 +277,6 @@ class LiamW_AlterEgoDetector_Extend_Model_SpamPrevention extends XFCP_LiamW_Alte
 	}
 
 	/**
-	 * @return XenForo_Model_User
-	 */
-	private function _getUserModel()
-	{
-		return $this->getModelFromCache('XenForo_Model_User');
-	}
-
-	private function _debug($message)
-	{
-		if (XenForo_Application::getOptions()->aeddebugmessages)
-		{
-			XenForo_Error::debug($message);
-		}
-	}
-
-	/**
 	 * Gets the cookie value, or null if the cookie isn't set.
 	 *
 	 * @return string|null
@@ -315,6 +312,22 @@ class LiamW_AlterEgoDetector_Extend_Model_SpamPrevention extends XFCP_LiamW_Alte
 		else
 		{
 			setcookie($cookieName, $value, XenForo_Application::$time + $time);
+		}
+	}
+
+	/**
+	 * @return XenForo_Model_User
+	 */
+	private function _getUserModel()
+	{
+		return $this->getModelFromCache('XenForo_Model_User');
+	}
+
+	private function _debug($message)
+	{
+		if (XenForo_Application::getOptions()->aeddebugmessages)
+		{
+			XenForo_Error::debug($message);
 		}
 	}
 }
