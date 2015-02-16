@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="utf-8"?>
+<addon addon_id="liam_ae_detector" title="Alter Ego Detector" version_string="1.4.5" version_id="10405"
+       url="http://xf-liam.com/categories/alter-ego-detector.13/" install_callback_class="LiamW_AlterEgoDetector_Addon"
+       install_callback_method="install" uninstall_callback_class="LiamW_AlterEgoDetector_Addon"
+       uninstall_callback_method="uninstall">
+    <admin_navigation/>
+    <admin_permissions/>
+    <admin_style_properties/>
+    <admin_templates>
+        <template title="liam_aed_option_ipcheck"><![CDATA[<xen:checkboxunit label="" hint="{$preparedOption.hint}">
+	<xen:option name="{$fieldPrefix}[{$preparedOption.option_id}][checkIp]" label="{xen:phrase liam_aed_ipcheck}" value="1" selected="{$preparedOption.option_value.checkIp}" inputclass="Disabler Hider" />
+	<xen:explain>{xen:raw $preparedOption.explain}</xen:explain>
+	<xen:html>
+		<span id="ctrl_optionsaedcheckipscheckIp_1_Disabler">{xen:phrase liam_aed_check_ips_up_to} <xen:textbox size="3" name="{$fieldPrefix}[{$preparedOption.option_id}][minTime]" value="{$preparedOption.option_value.minTime}" class="textCtrl"/> {xen:phrase aed_minutes} {xen:phrase aed_old}.</span>
+		<input type="hidden" name="{$listedFieldName}" value="{$preparedOption.option_id}" />
+		{xen:raw $editLink}
+	</xen:html>
+</xen:checkboxunit>]]></template>
+    </admin_templates>
+    <admin_template_modifications/>
+    <code_events/>
+    <code_event_listeners>
+        <listener event_id="load_class" execute_order="1" callback_class="LiamW_AlterEgoDetector_Addon"
+                  callback_method="extendClass" active="1" hint="XenForo_ControllerPublic_Login"
+                  description="XenForo_ControllerPublic_Login"/>
+        <listener event_id="load_class" execute_order="10" callback_class="LiamW_AlterEgoDetector_Addon"
+                  callback_method="extendClass" active="1" hint="XenForo_Model_SpamPrevention"
+                  description="XenForo_Model_SpamPrevention"/>
+    </code_event_listeners>
+    <cron/>
+    <email_templates/>
+    <email_template_modifications/>
+    <optiongroups>
+        <group group_id="aed_debugoptions" display_order="100000" debug_only="1"/>
+        <group group_id="aed_options" display_order="50000" debug_only="0"/>
+        <option option_id="aedcheckbanned" edit_format="onoff" data_type="boolean" can_backup="1">
+            <default_value></default_value>
+            <edit_format_params></edit_format_params>
+            <sub_options></sub_options>
+            <relation group_id="aed_options" display_order="102"/>
+        </option>
+        <option option_id="aedcheckips" edit_format="template" data_type="array" can_backup="1">
+            <default_value></default_value>
+            <edit_format_params>liam_aed_option_ipcheck</edit_format_params>
+            <sub_options>checkIp
+                minTime
+            </sub_options>
+            <relation group_id="aed_options" display_order="103"/>
+        </option>
+        <option option_id="aedcreatethread" edit_format="onoff" data_type="boolean" can_backup="1">
+            <default_value></default_value>
+            <edit_format_params></edit_format_params>
+            <sub_options></sub_options>
+            <relation group_id="aed_options" display_order="201"/>
+        </option>
+        <option option_id="aeddebugmessages" edit_format="onoff" data_type="boolean" can_backup="1">
+            <default_value></default_value>
+            <edit_format_params></edit_format_params>
+            <sub_options></sub_options>
+            <relation group_id="aed_debugoptions" display_order="1"/>
+        </option>
+        <option option_id="aedforumid" edit_format="callback" data_type="unsigned_integer" can_backup="1">
+            <default_value></default_value>
+            <edit_format_params>XenForo_Option_NodeChooser::renderSelect</edit_format_params>
+            <sub_options></sub_options>
+            <relation group_id="aed_options" display_order="202"/>
+        </option>
+        <option option_id="aedpmrecipients" edit_format="textbox" data_type="string" can_backup="1">
+            <default_value></default_value>
+            <edit_format_params>rows=4</edit_format_params>
+            <sub_options></sub_options>
+            <relation group_id="aed_options" display_order="304"/>
+        </option>
+        <option option_id="aedpmsenderid" edit_format="textbox" data_type="unsigned_integer" can_backup="1">
+            <default_value>1</default_value>
+            <edit_format_params></edit_format_params>
+            <sub_options></sub_options>
+            <relation group_id="aed_options" display_order="302"/>
+        </option>
+        <option option_id="aedpmusername" edit_format="textbox" data_type="string" can_backup="1">
+            <default_value></default_value>
+            <edit_format_params></edit_format_params>
+            <sub_options></sub_options>
+            <relation group_id="aed_options" display_order="303"/>
+        </option>
+        <option option_id="aedredeploycookie" edit_format="onoff" data_type="boolean" can_backup="1">
+            <default_value>0</default_value>
+            <edit_format_params></edit_format_params>
+            <sub_options></sub_options>
+            <relation group_id="aed_options" display_order="101"/>
+        </option>
+        <option option_id="aedregistrationmode" edit_format="radio" data_type="integer" can_backup="1">
+            <default_value>1</default_value>
+            <edit_format_params>0=None
+                1=Moderate
+                2=Block
+            </edit_format_params>
+            <sub_options></sub_options>
+            <relation group_id="aed_options" display_order="501"/>
+        </option>
+        <option option_id="aedreport" edit_format="onoff" data_type="boolean" can_backup="1">
+            <default_value>1</default_value>
+            <edit_format_params></edit_format_params>
+            <sub_options></sub_options>
+            <relation group_id="aed_options" display_order="401"/>
+        </option>
+        <option option_id="aedreport_senddupe" edit_format="checkbox" data_type="array" can_backup="1">
+            <default_value></default_value>
+            <edit_format_params>open=Open
+                assigned=Assigned
+                resolved=Resolved
+                rejected=Rejected
+            </edit_format_params>
+            <sub_options>open
+                assigned
+                resolved
+                rejected
+            </sub_options>
+            <relation group_id="aed_options" display_order="403"/>
+        </option>
+        <option option_id="aedsendpm" edit_format="onoff" data_type="boolean" can_backup="1">
+            <default_value></default_value>
+            <edit_format_params></edit_format_params>
+            <sub_options></sub_options>
+            <relation group_id="aed_options" display_order="301"/>
+        </option>
+        <option option_id="aeduserid" edit_format="textbox" data_type="unsigned_integer" can_backup="1">
+            <default_value>1</default_value>
+            <edit_format_params></edit_format_params>
+            <sub_options></sub_options>
+            <relation group_id="aed_options" display_order="203"/>
+        </option>
+        <option option_id="aedusername" edit_format="textbox" data_type="string" can_backup="1">
+            <default_value></default_value>
+            <edit_format_params></edit_format_params>
+            <sub_options></sub_options>
+            <relation group_id="aed_options" display_order="204"/>
+        </option>
+        <option option_id="liam_aed_cookiename" edit_format="textbox" data_type="string" can_backup="1">
+            <default_value>userinit</default_value>
+            <edit_format_params>max=10</edit_format_params>
+            <sub_options></sub_options>
+            <relation group_id="aed_options" display_order="1"/>
+        </option>
+        <option option_id="liam_aed_reporter" edit_format="textbox" data_type="unsigned_integer" can_backup="1">
+            <default_value>1</default_value>
+            <edit_format_params></edit_format_params>
+            <sub_options></sub_options>
+            <relation group_id="aed_options" display_order="402"/>
+        </option>
+    </optiongroups>
+    <permissions>
+        <permission_groups/>
+        <permissions>
+            <permission permission_group_id="general" permission_id="aedbypass" permission_type="flag"
+                        default_value="unset" interface_group_id="generalModeratorPermissions" display_order="5000"/>
+            <permission permission_group_id="general" permission_id="aedviewreport" permission_type="flag"
+                        default_value="unset" interface_group_id="generalModeratorPermissions" display_order="5010"/>
+        </permissions>
+        <interface_groups/>
+    </permissions>
+    <phrases>
+        <phrase title="aed_detectspamreg_accept" version_id="10402" version_string="1.4.2">
+            <![CDATA[Accepting, Alter Ego - Username: {username}, UserId: {user_id}]]></phrase>
+        <phrase title="aed_detectspamreg_moderate" version_id="10402" version_string="1.4.2">
+            <![CDATA[Moderating, Alter Ego - Username: {username}, UserId: {user_id}]]></phrase>
+        <phrase title="aed_detectspamreg_reject" version_id="10402" version_string="1.4.2">
+            <![CDATA[Rejecting, Alter Ego - Username: {username}], UserId: {user_id}]]></phrase>
+        <phrase title="aed_minutes" version_id="10306" version_string="1.3.6"><![CDATA[minutes]]></phrase>
+        <phrase title="aed_old" version_id="10306" version_string="1.3.6"><![CDATA[old]]></phrase>
+        <phrase title="aed_thread_message" version_id="10306" version_string="1.3.6">
+            <![CDATA[It looks like [url="{userLink2}"]{username2}[/url] is an alter ego of [url="{userLink1}"]{username1}[/url]...]]></phrase>
+        <phrase title="aed_thread_subject" version_id="1" version_string="1.0">
+            <![CDATA[{username} is an alter ego!]]></phrase>
+        <phrase title="liam_aed_check_ips_up_to" version_id="10306" version_string="1.3.6">
+            <![CDATA[Check IP's up to]]></phrase>
+        <phrase title="liam_aed_ipcheck" version_id="10306" version_string="1.3.6"><![CDATA[Check IP's]]></phrase>
+        <phrase title="option_aedcheckbanned" version_id="10201" version_string="1.2.1">
+            <![CDATA[Check Banned Users]]></phrase>
+        <phrase title="option_aedcheckbanned_explain" version_id="10201" version_string="1.2.1">
+            <![CDATA[If this is ticked, banned users won't be exempt from the alter ego checking.]]></phrase>
+        <phrase title="option_aedcheckips" version_id="10306" version_string="1.3.6"><![CDATA[IP Checking]]></phrase>
+        <phrase title="option_aedcheckips_explain" version_id="10306" version_string="1.3.6"><![CDATA[]]></phrase>
+        <phrase title="option_aedcreatethread" version_id="1" version_string="1.0"><![CDATA[Create thread?]]></phrase>
+        <phrase title="option_aedcreatethread_explain" version_id="1" version_string="1.0">
+            <![CDATA[If ticked, a thread will be created when an alter ego is detected.]]></phrase>
+        <phrase title="option_aeddebugmessages" version_id="1" version_string="1.0">
+            <![CDATA[Log debug messages]]></phrase>
+        <phrase title="option_aeddebugmessages_explain" version_id="1" version_string="1.0">
+            <![CDATA[If enabled, and the board is in debug mode, then debug messages for this addon will be added to the server error log. This may fill up the error log.]]></phrase>
+        <phrase title="option_aedforumid" version_id="10306" version_string="1.3.6"><![CDATA[Forum]]></phrase>
+        <phrase title="option_aedforumid_explain" version_id="10306" version_string="1.3.6">
+            <![CDATA[Select the forum you wish to create alter ego threads in.]]></phrase>
+        <phrase title="option_aedpmrecipients" version_id="1" version_string="1.0">
+            <![CDATA[Recipient usernames]]></phrase>
+        <phrase title="option_aedpmrecipients_explain" version_id="10306" version_string="1.3.6">
+            <![CDATA[Enter a list of users that should receive an alter ego conversation. One per line.]]></phrase>
+        <phrase title="option_aedpmsenderid" version_id="10306" version_string="1.3.6">
+            <![CDATA[Sender UserID]]></phrase>
+        <phrase title="option_aedpmsenderid_explain" version_id="10306" version_string="1.3.6">
+            <![CDATA[Please enter the user_id of the user that will send the PM.]]></phrase>
+        <phrase title="option_aedpmusername" version_id="1" version_string="1.0">
+            <![CDATA[Username of PM Sender]]></phrase>
+        <phrase title="option_aedpmusername_explain" version_id="1" version_string="1.0">
+            <![CDATA[Enter the username of the PM sender]]></phrase>
+        <phrase title="option_aedredeploycookie" version_id="2" version_string="1.1">
+            <![CDATA[Redeploy Cookie]]></phrase>
+        <phrase title="option_aedredeploycookie_explain" version_id="2" version_string="1.1">
+            <![CDATA[If this is enabled, then the cookie will be reset with the new user if an AE is detected. This could be used to catch AE's of the AE, but may cause 2 flags to be made when each user logs out then in.]]></phrase>
+        <phrase title="option_aedregistrationmode" version_id="1" version_string="1.0">
+            <![CDATA[Registration Mode]]></phrase>
+        <phrase title="option_aedregistrationmode_explain" version_id="2" version_string="1.1">
+            <![CDATA[If none is selected, this addon will not affect registrations. If moderate is selected, registrations that have failed the AE check will have to be approved by an administrator. If block is selected, registrations that have failed the AE check will be blocked.]]></phrase>
+        <phrase title="option_aedreport" version_id="2" version_string="1.1"><![CDATA[Start report]]></phrase>
+        <phrase title="option_aedreport_explain" version_id="2" version_string="1.1">
+            <![CDATA[If checked, a report will be created in the reported items list.]]></phrase>
+        <phrase title="option_aedreport_senddupe" version_id="10402" version_string="1.4.2">
+            <![CDATA[Permit Duplicate Report]]></phrase>
+        <phrase title="option_aedreport_senddupe_explain" version_id="10402" version_string="1.4.2">
+            <![CDATA[A list of states which are acceptable for duplicate reports to be raised.]]></phrase>
+        <phrase title="option_aedsendpm" version_id="1" version_string="1.0"><![CDATA[Send PM]]></phrase>
+        <phrase title="option_aedsendpm_explain" version_id="1" version_string="1.0">
+            <![CDATA[If enabled, a PM will be sent if an AE is detected]]></phrase>
+        <phrase title="option_aeduserid" version_id="1" version_string="1.0"><![CDATA[User ID]]></phrase>
+        <phrase title="option_aeduserid_explain" version_id="10306" version_string="1.3.6">
+            <![CDATA[Enter the user id of the user posting the thread. If this is 0 it will be posted as a guest.]]></phrase>
+        <phrase title="option_aedusername" version_id="1" version_string="1.0"><![CDATA[Username]]></phrase>
+        <phrase title="option_aedusername_explain" version_id="1" version_string="1.0">
+            <![CDATA[Username of the posting user. This is required.]]></phrase>
+        <phrase title="option_group_aed_debugoptions" version_id="1" version_string="1.0">
+            <![CDATA[Alter Ego Detector Debugging Options]]></phrase>
+        <phrase title="option_group_aed_debugoptions_description" version_id="1" version_string="1.0">
+            <![CDATA[Debugging options for the alter ego detector addon. Mainly to make the developer's life easier...]]></phrase>
+        <phrase title="option_group_aed_options" version_id="1" version_string="1.0">
+            <![CDATA[Alter Ego Detector Options]]></phrase>
+        <phrase title="option_group_aed_options_description" version_id="1" version_string="1.0"><![CDATA[]]></phrase>
+        <phrase title="option_liam_aed_cookiename" version_id="10302" version_string="1.3.2">
+            <![CDATA[Cookie Name]]></phrase>
+        <phrase title="option_liam_aed_cookiename_explain" version_id="10302" version_string="1.3.2"><![CDATA[Enter the name of the cookie that will be used for alter ego checking.
+<i>Please be aware that changes here will not update existing cookies.</i>]]></phrase>
+        <phrase title="option_liam_aed_reporter" version_id="10306" version_string="1.3.6"><![CDATA[Reporter]]></phrase>
+        <phrase title="option_liam_aed_reporter_explain" version_id="10306" version_string="1.3.6">
+            <![CDATA[Enter the user id of the person reporting Alter Ego's]]></phrase>
+        <phrase title="permission_general_aedbypass" version_id="3" version_string="1.2">
+            <![CDATA[Bypass Alter Ego Checking]]></phrase>
+        <phrase title="permission_general_aedviewreport" version_id="10403" version_string="1.4.2a">
+            <![CDATA[View Alter Ego Report]]></phrase>
+    </phrases>
+    <route_prefixes/>
+    <style_properties/>
+    <templates/>
+    <public_template_modifications>
+        <modification template="report_view" modification_key="aedreportviewmod_13"
+                      description="For XenForo 1.3 &amp; 1.4" execution_order="0" enabled="1" action="str_replace">
+            <find><![CDATA[<div class="secondaryContent memberListItem">
+		<xen:avatar user="$report" size="s" />
+
+		<div class="member">
+			<xen:if is="{$report.user_id}">
+				<h3 class="username"><xen:username user="$report" rich="true" /></h3>
+				
+				<div class="userInfo">
+					<div class="userBlurb dimmed">{xen:helper userBlurb, $report}</div>
+					<dl class="userStats pairsInline">
+						<dt title="{xen:phrase total_messages_posted_by_x, 'name={$report.username}'}">{xen:phrase messages}:</dt> <dd>{xen:number $report.message_count}</dd>
+						<dt title="{xen:phrase number_of_times_something_posted_by_x_has_been_liked, 'name={$report.username}'}">{xen:phrase likes_received}:</dt> <dd>{xen:number $report.like_count}</dd>
+						<dt>{xen:phrase trophy_points}:</dt> <dd title="{xen:phrase trophy_points}">{xen:number $report.trophy_points}</dd>
+					</dl>
+				</div>	
+			<xen:else />
+				<h3 class="username guest dimmed">{xen:phrase guest}</h3>
+			</xen:if>
+		</div>
+	</div>]]></find>
+            <replace><![CDATA[<xen:if is="!{$report.extraContent.0}">
+$0
+<xen:else />
+<xen:foreach loop="$report.extraContent.0" value="$user">
+     <div class="secondaryContent memberListItem">
+		<xen:avatar user="$user" size="s" />
+
+		<ul class="extra reportUserLinks">
+			<xen:if is="{$canCleanSpam}">
+				<li><a href="{xen:link spam-cleaner, $user}" class="OverlayTrigger">{xen:phrase spam}</a></li>
+			</xen:if>
+			<xen:if is="{$canWarn}">
+				<li><a href="{xen:link members/warn, $user}">{xen:phrase warn}</a></li>
+			</xen:if>
+			<xen:if is="{$canBanUsers}">
+				<li><a href="{xen:adminlink banning/users/add, $user}" target="_blank">{xen:phrase ban}</a></li>
+			</xen:if>
+			<xen:if is="{$canEditUsers}">
+				<li><a href="{xen:adminlink users/edit, $user}" target="_blank">{xen:phrase edit}</a></li>
+			</xen:if>
+		</ul>
+
+		<div class="member">
+			<xen:if is="{$user.user_id}">
+				<h3 class="username"><xen:username user="$user" rich="true" /></h3>
+				
+				<div class="userInfo">
+					<div class="userBlurb dimmed">{xen:helper userBlurb, $user}</div>
+					<dl class="userStats pairsInline">
+						<dt title="{xen:phrase total_messages_posted_by_x, 'name={$user.username}'}">{xen:phrase messages}:</dt> <dd>{xen:number $user.message_count}</dd>
+						<dt title="{xen:phrase number_of_times_something_posted_by_x_has_been_liked, 'name={$user.username}'}">{xen:phrase likes_received}:</dt> <dd>{xen:number $user.like_count}</dd>
+						<dt>{xen:phrase trophy_points}:</dt> <dd title="{xen:phrase trophy_points}">{xen:number $user.trophy_points}</dd>
+					</dl>
+				</div>	
+			<xen:else />
+				<h3 class="username guest dimmed">{xen:phrase guest}</h3>
+			</xen:if>
+		</div>
+	</div>
+</xen:foreach>
+</xen:if>]]></replace>
+        </modification>
+    </public_template_modifications>
+    <bb_code_media_sites/>
+    <bb_codes/>
+</addon>
