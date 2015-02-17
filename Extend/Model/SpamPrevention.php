@@ -272,7 +272,7 @@ class LiamW_AlterEgoDetector_Extend_Model_SpamPrevention extends XFCP_LiamW_Alte
 
 		if ($options->aedredeploycookie)
 		{
-			$this->setCookieValue($newUserId);
+			$this->setCookieValue($newUserId, $options->aed_cookie_lifespan * 2592000);
 		}
 	}
 
