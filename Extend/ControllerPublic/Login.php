@@ -72,7 +72,7 @@ class LiamW_AlterEgoDetector_Extend_ControllerPublic_Login extends XFCP_LiamW_Al
 					{
 						$bypassCheck = false;
 						// set a new cookie as the old account was deleted
-						$spamModel->setCookieValue($originalUserId);
+						$spamModel->setCookieValue($originalUserId, $options->aed_cookie_lifespan * 2592000);
 					}
 					if (!$bypassCheck)
 					{
@@ -87,7 +87,7 @@ class LiamW_AlterEgoDetector_Extend_ControllerPublic_Login extends XFCP_LiamW_Al
 		else if (!$bypassCheck)
 		{
 			// SET COOKIE
-			$spamModel->setCookieValue($originalUserId);
+			$spamModel->setCookieValue($originalUserId, $options->aed_cookie_lifespan * 2592000);
 		}
 
 		if (!$aeDetected && !$bypassCheck)

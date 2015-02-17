@@ -33,6 +33,12 @@
     <optiongroups>
         <group group_id="aed_debugoptions" display_order="100000" debug_only="1"/>
         <group group_id="aed_options" display_order="50000" debug_only="0"/>
+    <option option_id="aed_cookie_lifespan" edit_format="spinbox" data_type="positive_integer" can_backup="1">
+      <default_value>12</default_value>
+      <edit_format_params></edit_format_params>
+      <sub_options></sub_options>
+      <relation group_id="aed_options" display_order="10"/>
+    </option>
         <option option_id="aedcheckbanned" edit_format="onoff" data_type="boolean" can_backup="1">
             <default_value></default_value>
             <edit_format_params></edit_format_params>
@@ -227,6 +233,8 @@
         <phrase title="option_aedusername" version_id="1" version_string="1.0"><![CDATA[Username]]></phrase>
         <phrase title="option_aedusername_explain" version_id="1" version_string="1.0">
             <![CDATA[Username of the posting user. This is required.]]></phrase>
+        <phrase title="option_aed_cookie_lifespan" version_id="10405" version_string="1.4.5"><![CDATA[Cookie Lifespan]]></phrase>
+        <phrase title="option_aed_cookie_lifespan_explain" version_id="10405" version_string="1.4.5"><![CDATA[The Lifespan of the cookie in months.]]></phrase>
         <phrase title="option_group_aed_debugoptions" version_id="1" version_string="1.0">
             <![CDATA[Alter Ego Detector Debugging Options]]></phrase>
         <phrase title="option_group_aed_debugoptions_description" version_id="1" version_string="1.0">
