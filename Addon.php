@@ -58,4 +58,9 @@ abstract class LiamW_AlterEgoDetector_Addon
 				break;
 		}
 	}
+	
+	// This is a stub to allow the upgrade to go smoothly
+	public static function initDependencies(XenForo_Dependencies_Abstract $dependencies, array $data)
+	{
+	}
 }
